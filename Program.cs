@@ -1,4 +1,6 @@
+using Microsoft.EntityFrameworkCore;
 using React_ASPNETCore;
+using React_ASPNETCore.Data;
 using React_ASPNETCore.Services;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -19,6 +21,13 @@ builder.Services.AddCors(options =>
         .AllowAnyHeader() 
         .AllowAnyMethod());
 });
+
+//// Register ProductDbContext with the DI container
+//builder.Services.AddDbContext<ProductDbContext>(options =>
+//    options.UseSqlServer(builder.Configuration.GetConnectionString("ProductDbContext")));
+
+builder.Services.AddDbContext<ProductDbContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("ProductDbContext")));
 
 var app = builder.Build();
 
