@@ -21,7 +21,7 @@ namespace React_ASPNETCore.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Product>>> GetProducts()
         {
-            return Ok(await _context.Product.ToListAsync());
+            return Ok(_context.Product.ToList());
         }
 
         // GET: api/products/{id}
@@ -42,6 +42,8 @@ namespace React_ASPNETCore.Controllers
         [HttpPost]
         public async Task<ActionResult<Product>> CreateProduct(Product product)
         {
+            product.ID = 0; // Ensure to not insert an explicit value;
+
             _context.Product.Add(product); 
             await _context.SaveChangesAsync();
 
