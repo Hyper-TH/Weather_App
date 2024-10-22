@@ -22,14 +22,21 @@ builder.Services.AddCors(options =>
         .AllowAnyMethod());
 });
 
-//// Register ProductDbContext with the DI container
-//builder.Services.AddDbContext<ProductDbContext>(options =>
-//    options.UseSqlServer(builder.Configuration.GetConnectionString("ProductDbContext")));
-
 builder.Services.AddDbContext<ProductDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("ProductDbContext")));
 
 var app = builder.Build();
+
+// Configure middleware
+if (app.Environment.IsDevelopment())
+{
+    // Enable Swagger middleware for development environment
+    app.UseSwagger();
+    app.UseSwaggerUI(c =>
+    {
+        c.SwaggerEndpoint("/swagger/v1/swagger.json", "API V1");  // Make sure Swagger is configured to point to the correct endpoint
+    });
+}
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
