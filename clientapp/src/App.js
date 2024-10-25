@@ -1,6 +1,6 @@
 import './App.css';
 import { Routes, Route } from 'react-router-dom';
-import { HomePage, WeatherPage } from './RouteImports.js';
+import { HomePage, WeatherPage, ProductsPage } from './RouteImports.js';
 
 function App() {
     return (
@@ -13,10 +13,10 @@ function App() {
                     <Route
                         path="/weather"
                         element={<WeatherPage backTo="/"/>} />
-                    {/*<Route*/}
-                    {/*    path="/products"*/}
-                    {/*    element={<ProductsPage backTo="/" />}*/}
-                    {/*/>*/}
+                    <Route
+                        path="/products"
+                        element={<ProductsPage backTo="/" />}
+                    />
                 </Routes>
             </header>
         </div>
