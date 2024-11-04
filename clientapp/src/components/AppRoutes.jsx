@@ -1,19 +1,23 @@
 ﻿import { Routes, Route } from 'react-router-dom';
-import { HomePage, WeatherPage, ProductsPage, CurrentDatePage } from '../RouteImports.js';
+import * as Pages from '../RouteImports.js';
 
 const AppRoutes = () => (
     <Routes>
-        <Route path="/" element={<HomePage />} />
+        <Route path="/" element={<Pages.HomePage />} />
         <Route
             path="/weather"
-            element={<WeatherPage backTo="/" />} />
+            element={<Pages.WeatherPage backTo="/" />} />
         <Route
             path="/products"
-            element={<ProductsPage backTo="/" />}
+            element={<Pages.ProductsPage backTo="/" />}
         />
         <Route
             path="/datetime"
-            element={<CurrentDatePage backTo="/" />}
+            element={<Pages.CurrentDatePage backTo="/" />}
+        />
+        <Route
+            path="/calendar"
+            element={<Pages.CalendarPage backTo="/" />}
         />
     </Routes>
 )
