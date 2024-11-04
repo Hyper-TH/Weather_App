@@ -19,8 +19,8 @@ const WeatherPage = ({ backTo }) => {
     return (
         <>
             <section className="main_container">
-                <div className="sub_cntainer">
-                    <div className="sub_cintainer_header">
+                <div className="sub_container">
+                    <div className="sub_container_header">
                         <Link to={backTo}>
                             <button>
                                 Go back
@@ -42,9 +42,7 @@ const WeatherPage = ({ backTo }) => {
                                     temperature={data.temperatureC}
                                 />
                             )
-                        })
-
-                        }
+                        })}
                     </div>
                 </div>
             </section>
