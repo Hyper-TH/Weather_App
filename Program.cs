@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using React_ASPNETCore;
 using React_ASPNETCore.Data;
 using React_ASPNETCore.Services;
+using DotNetEnv;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -24,6 +25,19 @@ builder.Services.AddCors(options =>
 
 builder.Services.AddDbContext<ProductDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("ProductDbContext")));
+
+// Firestore Config
+Env.Load("config/.env");
+
+
+var projectId = Environment.GetEnvironmentVariable("GOOGLE_PROJECT_ID");
+var credentialsPath = Environment.GetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS");
+if (string.IsNullOrEmpty(projectId))
+{
+    throw new InvalidOperationException("Google Project ID is not set in the environment variables.");
+}
+
+builder.Services.AddSingleton(new FirestoreService(projectId));
 
 var app = builder.Build();
 
