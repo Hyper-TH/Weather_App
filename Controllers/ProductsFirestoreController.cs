@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using React_ASPNETCore.Models;
 using React_ASPNETCore.Services;
 using Microsoft.AspNetCore.JsonPatch;
+using Microsoft.CodeAnalysis;
 
 namespace React_ASPNETCore.Controllers
 {
@@ -17,10 +18,11 @@ namespace React_ASPNETCore.Controllers
             _firestoreService = firestoreService;
         }
 
-        [HttpGet("{id}")]
-        public async Task<IActionResult> GetProduct(string id)
+        // GET /api/products/{productID}
+        [HttpGet("{productID:int}")]
+        public async Task<IActionResult> GetProduct(int productID)
         {
-            var product = await _firestoreService.GetProductAsync(id);
+            var product = await _firestoreService.GetProductAsync(productID);
             if (product == null)
             {
                 return NotFound();
@@ -41,27 +43,52 @@ namespace React_ASPNETCore.Controllers
             return Ok(products);
         }
 
-        // Full update
-        [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateProduct(string id, ProductDocument updatedProduct)
+        [HttpPost]
+        public async Task<IActionResult> AddProduct([FromBody] ProductDocument newProduct)
         {
-            updatedProduct.ID = id.GetHashCode();
-            await _firestoreService.UpdateProductAsync(id, updatedProduct);
+            if (newProduct == null || newProduct.ProductID <= 0)
+            {
+                return BadRequest("Invalid product data");
+            }
 
-            return NoContent(); // 204 on successful update
+            try
+            {
+                await _firestoreService.AddProductAsync(newProduct);
+
+                // 201 response
+                return CreatedAtAction(nameof(GetProduct), new { productID = newProduct.ProductID }, newProduct);
+            }
+            catch (InvalidOperationException ex)
+            {
+                return Conflict(new { message = ex.Message });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = ex.Message });
+            }
         }
 
-        // Partial Update
-        [HttpPatch("{id}")]
-        public async Task<IActionResult> UpdateProductPartial(string id, JsonPatchDocument<ProductDocument> patchDoc)
-        {
-            var product = await _firestoreService.GetProductAsync(id);
-            if (product == null) return NotFound();
+        //// Full update
+        //[HttpPut("{productID:int}")]
+        //public async Task<IActionResult> UpdateProduct(int productID, ProductDocument updatedProduct)
+        //{
+        //    updatedProduct.ProductID = productID.GetHashCode();
+        //    await _firestoreService.UpdateProductAsync(productID, updatedProduct);
 
-            patchDoc.ApplyTo(product);
-            await _firestoreService.UpdateProductAsync(id, product);
+        //    return NoContent(); // 204 on successful update
+        //}
 
-            return NoContent();
-        }
+        //// Partial Update
+        //[HttpPatch("{productID:int}")]
+        //public async Task<IActionResult> UpdateProductPartial(int productID, JsonPatchDocument<ProductDocument> patchDoc)
+        //{
+        //    var product = await _firestoreService.GetProductAsync(productID);
+        //    if (product == null) return NotFound();
+
+        //    patchDoc.ApplyTo(product);
+        //    await _firestoreService.UpdateProductAsync(productID, product);
+
+        //    return NoContent();
+        //}
     }
 }
