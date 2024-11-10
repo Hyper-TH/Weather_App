@@ -1,7 +1,6 @@
 ﻿import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Weather } from '../components/Weather.js';
-import '../styles/home.css';
 
 const WeatherPage = ({ backTo }) => {
     const [weatherData, setWeatherData] = useState([]);

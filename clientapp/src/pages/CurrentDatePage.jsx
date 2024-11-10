@@ -1,6 +1,4 @@
-﻿import '../styles/home.css';
-
-const CurrentDatePage = ({ backTo }) => {
+﻿const CurrentDatePage = ({ backTo }) => {
     const date = new Date();
     const showTime = date.getHours()
         + ':' + date.getMinutes()

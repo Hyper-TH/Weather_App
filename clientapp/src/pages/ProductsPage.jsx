@@ -6,7 +6,7 @@ const ProductsPage = ({ backTo }) => {
     const [productsData, setProductsData] = useState([]);
 
     useEffect(() => {
-        fetch('http://localhost:5076/api/ProductsAPI')
+        fetch('http://localhost:5076/api/ProductsFirestore')
             .then(res => res.json())
             .then(data => setProductsData(data))
             .catch(err => console.error('Error fetching products data', err));

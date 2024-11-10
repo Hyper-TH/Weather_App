@@ -1,5 +1,4 @@
 import Navigation from '../components/Navigation.jsx'
-import '../styles/home.css';
 
 const HomePage = () => {
     return (
