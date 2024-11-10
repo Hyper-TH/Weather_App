@@ -20,7 +20,7 @@ namespace React_ASPNETCore.Services
 
                 return new WeatherForecast
                 {
-                    Date = DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
+                    Date = DateOnly.FromDateTime(System.DateTime.Now.AddDays(index)),
                     TemperatureC = temperatureC,
                     Summary = summary
                 };
