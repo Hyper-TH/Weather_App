@@ -1,22 +1,51 @@
 ﻿import { useState } from "react";
 
 const ProductForm = () => {
-    const [name, setName] = useState("");
-    const [price, setPrice] = useState(null);
-    //const [prodID, setProdID] = useState(null);
+    const [product, setProduct] = useState({
+        productID: '',
+        name: '',
+        price: '',
+    });
     const [error, setError] = useState("");
 
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        setError("");
+    const handleChange = (e) => {
+        const { name, value } = e.target;
 
-        try {
-            console.log("Test");
-        } catch (error) {
-            console.log(error);
-        }
+        setProduct((prevProduct) => ({
+            ...prevProduct,
+            [name]: value,
+        }));
     };
+
+    const addProduct = async () => {
+        try {
+            const res = await fetch('http://localhost:5076/api/ProductsFirestore', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    ProductID: parseInt(product.productID),
+                    Name: product.name,
+                    Price: parseFloat(product.price),
+                }),
+            });
+
+            if (res.ok) {
+                const result = await res.json();
+
+                alert(result.message || 'Product added successfully');
+            } else {
+                alert('Failed to add product');
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            setError(error);
+
+            alert('Error adding product');
+        }
+    }
 
     return (
         <>
@@ -27,14 +56,27 @@ const ProductForm = () => {
                             Add New Product
                         </h1>
 
-                        <form onSubmit={handleSubmit} className='form'>
+                        <form className='form'>
+                            <div>
+                                <label>Product ID</label>
+                                <input
+                                    type="number"
+                                    name="productID"
+                                    placeholder="Input ID here"
+                                    value={product.productID}
+                                    onChange={handleChange}
+                                    required
+                                />
+                            </div>
+
                             <div>
                                 <label>Product Name</label>
                                 <input
                                     type="text"
+                                    name="name"
                                     placeholder="Input name here"
-                                    value={name}
-                                    onChange={(e) => setName(e.target.value)}
+                                    value={product.name}
+                                    onChange={handleChange}
                                     required
                                 />
                             </div>
@@ -43,14 +85,15 @@ const ProductForm = () => {
                                 <label>Product Price</label>
                                 <input
                                     type="number"
+                                    name="price"
                                     placeholder="Input price here"
-                                    value={price}
-                                    onChange={(e) => setPrice(e.target.value)}
+                                    value={product.price}
+                                    onChange={handleChange}
                                     required
                                 />
                             </div>
 
-                            <button className='submit'>Submit</button>
+                            <button className='submit' onClick={addProduct}>Submit</button>
                         </form>
                     </div>
                 </div>
