@@ -1,9 +1,11 @@
 ﻿import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Product } from '../components/Product.js';
+import ProductForm from '../components/ProductForm.js';
 
 const ProductsPage = ({ backTo }) => {
     const [productsData, setProductsData] = useState([]);
+    const [showForm, setShowForm] = useState(false);
 
     useEffect(() => {
         fetch('http://localhost:5076/api/ProductsFirestore')
@@ -12,9 +14,6 @@ const ProductsPage = ({ backTo }) => {
             .catch(err => console.error('Error fetching products data', err));
     }, []);
 
-    for (let i=0; i<= productsData.length; i++) {
-        console.log(productsData[i]);
-    }
 
     return (
         <>
@@ -43,6 +42,13 @@ const ProductsPage = ({ backTo }) => {
                         ))}
 
                     </div>
+
+                    <button onClick={() => setShowForm(!showForm)}>
+                        Add Product
+                    </button>
+
+                    {showForm && <ProductForm />}
+
                 </div>
             </section>
         </>
